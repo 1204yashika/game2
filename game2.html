@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="gameStyle.css">
+    <title>Game</title>
+</head>
+<body>
+    <div class="main">
+        <!--items on the right side of the boat-->
+        <img src="./image/cannibles-removebg-preview.png" alt="img" height="110px" width="110px" class="canni" id="canni-0-r"onclick="setitem(this)" >
+        <img src="./image/cannibles-removebg-preview.png" alt="img" height="110px" width="110px" class="canni" id="canni-1-r" onclick="setitem(this)">
+        <img src="./image/cannibles-removebg-preview.png" alt="img" height="110px" width="110px" class="canni" id="canni-2-r" onclick="setitem(this)">
+        <img src="./image/boat.png" alt="img" height="150px" width="200px" class="boat" onclick="move(this)">
+        <img src="./image/missnary-removebg-preview.png" alt="img" height="110px" width="110px" class="miss" id="miss-0-r" onclick="setitem(this)">
+        <img src="./image/missnary-removebg-preview.png" alt="img" height="110px" width="110px" class="miss" id="miss-1-r" onclick="setitem(this)">
+        <img src="./image/missnary-removebg-preview.png" alt="img" height="110px" width="110px" class="miss" id="miss-2-r" onclick="setitem(this)">
+
+        <!--items on the left side of the boat -->
+        <img src="./image/cannibles-removebg-preview.png" alt="img" height="110px" width="110px" class="canni" id="canni-0-l"onclick="setitem(this)" >
+        <img src="./image/cannibles-removebg-preview.png" alt="img" height="110px" width="110px" class="canni" id="canni-1-l" onclick="setitem(this)">
+        <img src="./image/cannibles-removebg-preview.png" alt="img" height="110px" width="110px" class="canni" id="canni-2-l" onclick="setitem(this)">
+        <img src="./image/missnary-removebg-preview.png" alt="img" height="110px" width="110px" class="miss" id="miss-0-l" onclick="setitem(this)">
+        <img src="./image/missnary-removebg-preview.png" alt="img" height="110px" width="110px" class="miss" id="miss-1-l" onclick="setitem(this)">
+        <img src="./image/missnary-removebg-preview.png" alt="img" height="110px" width="110px" class="miss" id="miss-2-l" onclick="setitem(this)">
+
+        <!--items on the boat-->
+        <img src="./image/cannibles-removebg-preview.png" alt="img" height="110px" width="110px" class="canni" id="canni-b-l"onclick="setitem(this)" >
+        <img src="./image/cannibles-removebg-preview.png" alt="img" height="110px" width="110px" class="canni" id="canni-b-r"onclick="setitem(this)" >
+        <img src="./image/missnary-removebg-preview.png" alt="img" height="110px" width="110px" class="miss" id="miss-b-l" onclick="setitem(this)">
+        <img src="./image/missnary-removebg-preview.png" alt="img" height="110px" width="110px" class="miss" id="miss-b-r" onclick="setitem(this)">
+
+    </div>
+</body>
+<script>
+    let boat_mem = 0;//boat members number
+    let boat_pos = "right";//position of the boat
+    let leftId = "";
+    let rightId = "";
+    let obj = [{"miss-0":1,"miss-1":1,"miss-2":1,"canni-0":-1,"canni-1":-1,"canni-2":-1},
+                {"miss-0":"r","miss-1":"r","miss-2":"r","canni-0":"r","canni-1":"r","canni-2":"r"}
+            ];
+
+    //function to set the location of the item
+    function setitem(e){
+        if(e.style.display=="none"){
+            return;
+        }
+        id = e.id;
+        [name,num,pos] = id.split("-");
+        console.log(name);
+        if(num=="b"){//checking if the item is on the boat or not
+            if(boat_pos=="left"){
+                if(pos=="l"){//the postition of item on the boat
+                    e.style.display = "none";
+                    [name2,num2,pos2] = leftId.split("-");
+                    document.getElementById(name2+"-"+num2+"-"+"l").style.display = "block";
+                    boat_mem--;
+                    leftId = "";
+                    obj[1][name2 + "-"+ num2] = "l";
+                }
+                else{
+                    e.style.display = "none";
+                    [name2,num2,pos2] = rightId.split("-");
+                    document.getElementById(name2+"-"+num2+"-"+"l").style.display = "block";
+                    boat_mem--;
+                    rightId = "";
+                    obj[1][name2 + "-"+ num2] = "l";
+                }
+
+            }
+            else{
+                if(pos=="l"){
+                    e.style.display = "none";
+                    [name2,num2,pos2] = leftId.split("-");
+                    document.getElementById(name2+"-"+num2+"-"+"r").style.display = "block";
+                    boat_mem--;
+                    leftId = "";
+                    obj[1][name2 + "-"+ num2] = "r";
+                }
+                else{
+                    e.style.display = "none";
+                    [name2,num2,pos2] = rightId.split("-");
+                    document.getElementById(name2+"-"+num2+"-"+"r").style.display = "block";
+                    boat_mem--;
+                    rightId = "";
+                    obj[1][name2 + "-"+ num2] = "r";
+                }
+            }
+        }
+        else{//if the item is not on the boat so on click it set the item on the boat
+            if((pos=="l" && boat_pos=="left") || (pos=="r" && boat_pos=="right") ){
+                if(boat_mem==0){//if boat mem is 0 it set left to the left side of the boat
+                if(name=="canni"){
+                    document.getElementById("canni-b-l").style.display = "block";
+                }
+                else{
+                    document.getElementById("miss-b-l").style.display = "block"; 
+                }
+                obj[1][name+"-"+num] = "b";
+                leftId = id;
+                e.style.display = "none";
+                boat_mem++;
+                }
+                else if(boat_mem==1){
+                    if(leftId==""){
+                        if(name=="canni"){
+                        document.getElementById("canni-b-l").style.display = "block";
+                        }
+                        else{
+                            document.getElementById("miss-b-l").style.display = "block"; 
+                        }
+                        obj[1][name+"-"+num] = "b";
+                        leftId = id;
+                    }
+                    else{
+                        if(name=="canni"){
+                        document.getElementById("canni-b-r").style.display = "block";
+                        }
+                        else{
+                        document.getElementById("miss-b-r").style.display = "block"; 
+                        }
+                        obj[1][name+"-"+num] = "b";
+                        rightId = id;
+                    }
+                    e.style.display = "none";
+                    boat_mem++;
+                }
+            }
+        }
+        winOrNot();
+    }
+
+    //function to make boat along with the item to move 
+    function move(e){
+        if(boat_mem>0){
+            if(boat_pos=="right"){
+                e.style.transform = 'translate(-500px, 0)';//to move the boat
+                boat_pos="left";
+                //to move the items along with the boat.
+                try{
+                    document.getElementById("miss-b-l").style.transform = 'translate(-500px,0)';
+                    
+                }
+                catch(e){
+                    console.log(e);
+                }
+                try{
+                    document.getElementById("miss-b-r").style.transform = 'translate(-500px,0)';
+                }
+                catch(e){
+                    console.log(e);
+                }
+                try{
+                    document.getElementById("canni-b-l").style.transform = 'translate(-500px,0)';
+                }
+                catch(e){
+                    console.log(e)
+                }
+                try{
+                    document.getElementById("canni-b-r").style.transform = 'translate(-500px,0)';
+
+                }
+                catch(e){
+                    console.log(e);
+                }
+            }
+            else{
+                e.style.transform = 'translate(0, 0)';
+                boat_pos= "right";
+                try{
+                    document.getElementById("miss-b-l").style.transform = 'translate(0,0)';                   
+                }
+                catch(e){
+                    console.log(e);
+                }
+                try{
+                    document.getElementById("miss-b-r").style.transform = 'translate(0,0)';
+                }
+                catch(e){
+                    console.log(e);
+                }
+                try{
+                    document.getElementById("canni-b-l").style.transform = 'translate(0,0)';
+                }
+                catch(e){
+                    console.log(e)
+                }
+                try{
+                    document.getElementById("canni-b-r").style.transform = 'translate(0,0)';
+                }
+                catch(e){
+                    console.log(e);
+                }
+            }
+            check();
+            winOrNot();
+        }
+    }
+
+    //function to check if the game is over or not
+    function check(){
+        var arr = ["miss-0","miss-1","miss-2","canni-0","canni-1","canni-2"];
+        var rightm = 0;
+        var rightc = 0;
+        var leftm = 0;
+        var leftc = 0;
+        for(i of arr){
+            if(obj[1][i]=="r" && obj[0][i]==1){
+                rightm++;
+            }
+            else if(obj[1][i]=="r" && obj[0][i]==-1){
+                rightc++;
+            }
+            else if(obj[1][i]=="l" && obj[0][i]==1){
+                leftm++;
+            }
+            else if(obj[1][i]=="l" && obj[0][i]==-1){
+                leftc++;
+            }
+            else if(obj[1][i]=="b" && boat_pos=="left"){
+                if(obj[0][i]==1){
+                    leftm++;
+                }
+                else{
+                    leftc++;
+                }
+            }
+            else{
+                if(obj[0][i]==1){
+                    rightm++;
+                }
+                else{
+                    rightc++;
+                }
+            }
+        }
+        if((rightc>rightm && rightm!=0)|| (leftc>leftm && leftm!=0)){
+            setTimeout(function(){
+                alert("Game Over...");
+                location.reload();
+            },500);
+            
+        }
+    }
+
+    //function to if you win the game or not
+    function winOrNot(){
+        var arr = ["miss-0","miss-1","miss-2","canni-0","canni-1","canni-2"];
+        count = 0;
+        for(i of arr){
+            if(obj[1][i]=="l"){
+                count++;
+            }
+        }
+        if(count==6){
+            setTimeout(() => {
+                alert("Congratulations! You Win");
+                location.reload();
+            }, 500);
+        }
+    }
+</script>
+</html> 
